@@ -1,19 +1,19 @@
 #include <iostream>
+#include <stdio.h>
+#include "FileLoader.h"
 
 using namespace std;
 
-int addNumbers(int a, int b) {
-    int total = a + b;
-
-    return  total;
-}
-
 int main() {
-    cout << "Hello, World!" << endl;
-    cout << "My name is Ollie!" << endl;
 
-    int total = addNumbers(2, 10);
+    string filePath = "";
+    cout << "Enter the filepath of a .docx file: ";
+    getline(cin, filePath);
 
-    cout << "The total is " << total;
+    FileLoader *fileLoader;
+    fileLoader = new FileLoader(filePath);
+
+    cout << fileLoader->fileContents;
+
     return 0;
 }
