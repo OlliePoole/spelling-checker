@@ -1,8 +1,6 @@
 # spelling-checker
 Design, implement and test a spelling checker
 
-![Code Language](https://img.shields.io/badge/language-C%2B%2B-green.svg)
-
 You can perform a spelling check on any of your own written work as follows.
 
 1. Convert a document of your own that is to be checked into plaintext (.txt) format.
