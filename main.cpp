@@ -2,13 +2,10 @@
 #include "FileLoader.h"
 #include "HashTable.h"
 
+
 using namespace std;
 
 int main() {
-
-    string filePath = "";
-    //cout << "Enter the filepath of a .docx file: ";
-    //getline(cin, filePath);
 
     //FileLoader *fileLoader;
     //fileLoader = new FileLoader("/Users/oliverpoole/Desktop/DOCFILE.docx");
