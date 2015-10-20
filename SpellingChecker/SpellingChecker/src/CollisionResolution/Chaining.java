@@ -12,7 +12,7 @@ public class Chaining implements CollisionResolutionInterface {
 
         switch (method) {
             case ChainingLinkedList: {
-                currentNode = Chaining.resolveCollisionWithLinkedList(element, table, currentNode);
+                currentNode = Chaining.resolveCollisionWithLinkedList(element, currentNode);
                 break;
             }
             case ChainingHashTable: {
@@ -43,21 +43,19 @@ public class Chaining implements CollisionResolutionInterface {
      * Resolves a conflict using a linked list
      *
      * @param element - The element to resolve
-     * @param table - The Table to add the element to
      *
      * @return The updated Table
      */
-    private static TableNode resolveCollisionWithLinkedList(String element, TableNode table[], TableNode currentNode) {
+    private static TableNode resolveCollisionWithLinkedList(String element, TableNode currentNode) {
 
-        // Find the end of the chain for the current node
-        while (currentNode != null) {
-            currentNode = currentNode.next;
+        TableNode newNode = new TableNode();
+        newNode.data = element;
+
+        if (currentNode != null) {
+            newNode.next = currentNode;
         }
 
-        currentNode.next = new TableNode();
-        currentNode.next.data = element;
-
-        return currentNode;
+        return newNode;
     }
 
     /**

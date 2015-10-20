@@ -31,3 +31,4 @@
 # IDE files
 .idea
 SpellingChecker.iml
+*.class

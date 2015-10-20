@@ -37,6 +37,7 @@ public class HashTable {
      * @param hashFunction - The hash function to use
      */
     public HashTable(String filePath, int tableSize, HashFunction hashFunction, CollisionResolutionMethod collisionResolutionMethod) throws IOException {
+
         this.tableSize = tableSize;
         this.hashFunction = hashFunction;
         this.collisionResolutionMethod = collisionResolutionMethod;
@@ -104,30 +105,19 @@ public class HashTable {
             // Find the current node at that hash index
             TableNode currentNode = table[hashValue];
 
-            // Instantiate an empty node ready for insertion
-            TableNode newNode = new TableNode();
-            newNode.data = element;
+            CollisionResolutionInterface collisionResolution = null;
 
-            // Is there a current node at the hashValue index?
-            if (currentNode == null) {
-                // No, add it to the table
-                table[hashValue] = newNode;
+            switch (collisionResolutionMethod) {
+                case LinearProbing: collisionResolution = new LinearProbing(); break;
+                case ChainingHashTable: collisionResolution = new Chaining(); break;
+                case ChainingLinkedList: collisionResolution = new Chaining(); break;
             }
-            else {
-                // Yes there is a node, select a collision resolution strategy
-                CollisionResolutionInterface collisionResolution = null;
 
-                switch (collisionResolutionMethod) {
-                    case LinearProbing: collisionResolution = new LinearProbing(); break;
-                    case ChainingHashTable: collisionResolution = new Chaining(); break;
-                    case ChainingLinkedList: collisionResolution = new Chaining(); break;
-                }
+            // Resolve the conflict and update the node in the table
+            currentNode = collisionResolution.resolveConflictWithElement(element, table, currentNode, collisionResolutionMethod);
 
-                // Resolve the conflict and update the node in the table
-                currentNode = collisionResolution.resolveConflictWithElement(element, table, currentNode, collisionResolutionMethod);
+            table[hashValue] = currentNode;
 
-                table[hashValue] = currentNode;
-            }
         }
     }
 
@@ -146,7 +136,6 @@ public class HashTable {
 
         // Is there anything at the hash value location?
         if (currentNode == null) return false;
-
 
         // Using the same collision resolution strategies, search for the element
         CollisionResolutionInterface collisionResolution = null;

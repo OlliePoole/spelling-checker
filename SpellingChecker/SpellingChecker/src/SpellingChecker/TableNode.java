@@ -5,6 +5,7 @@ package SpellingChecker;
  */
 public class TableNode {
 
-    public String data;
+    public Object data;
     public TableNode next;
 }
+

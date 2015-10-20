@@ -15,6 +15,10 @@ public class SpellingChecker {
                     HashTable.HashFunction.SuperFastHash,
                     HashTable.CollisionResolutionMethod.ChainingLinkedList);
 
+            System.out.println("Element 'aa' exists: " + table.elementExistsInHashTable("aa"));
+            System.out.println("Element 'vespids' exists: " + table.elementExistsInHashTable("vespids"));
+            System.out.println("Element 'Ollieinsjbd' exists: " + table.elementExistsInHashTable("Ollieinsjbd"));
+
             System.out.println("Hello world");
         } catch (IOException e) {
             e.printStackTrace();
