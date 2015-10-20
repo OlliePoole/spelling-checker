@@ -1,8 +1,16 @@
+package HashFunctions;
+
+import SpellingChecker.HashTable;
+
 /**
  * Implementation of Super Fast Hash
  * oliverpoole on 15/10/15.
  */
-public class SuperFastHash {
+public class SuperFastHash implements HashFunctionInterface {
+
+    public int hashElement(String element) {
+        return superFastHash(element);
+    }
 
     private static final long k16_BIT_MASK = 0xFFFFL;
     private static final int k1_BIT_MASK = 0x1;
@@ -14,12 +22,15 @@ public class SuperFastHash {
      * @param element - The element to be hashed
      * @return
      */
-    public static int superFastHash(String element) {
+    private int superFastHash(String element) {
         int temp;
         int hash = 0;
 
         // Convert the string element to ASCII
-        long asciiValue = Long.parseLong(element);
+        long asciiValue = 0;
+        byte[] stringBytes = element.getBytes();
+        for (int x = 0; x < stringBytes.length; x++) { asciiValue += (int)stringBytes[x]; }
+
 
         for (int x = 0; x < 4; x += 2) {
             hash += get16BitsAligned(asciiValue, x);
@@ -52,11 +63,6 @@ public class SuperFastHash {
     }
 
 
-
-
-
-
-
     /********************************************************************\
     |                              Util Methods                          |
     \********************************************************************/
@@ -68,7 +74,7 @@ public class SuperFastHash {
      * @param offset one of 0 to 3
      * @return
      */
-    public static int get16BitsAligned(long data, int offset) {
+    private int get16BitsAligned(long data, int offset) {
 
         // Normalize offset
         offset = offset % 4;
@@ -82,5 +88,4 @@ public class SuperFastHash {
         // Put bits in position
         return (int) (result >>> (16 * offset));
     }
-
 }
