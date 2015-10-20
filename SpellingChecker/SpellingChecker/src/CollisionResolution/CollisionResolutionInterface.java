@@ -13,12 +13,12 @@ public interface CollisionResolutionInterface {
      *
      * @param element - the element to add
      * @param table - The table to add the element to
-     * @param currentNode - The node found at the index where the element hashes
+     * @param hashValue - The hash value of the element
      * @param method - The collision resolution method to use
      *
      * @return The updated node
      */
-    TableNode resolveConflictWithElement(String element, TableNode[] table, TableNode currentNode, HashTable.CollisionResolutionMethod method);
+    Object resolveConflictWithElement(String element, TableNode[] table, int hashValue, HashTable.CollisionResolutionMethod method);
 
 
     /**

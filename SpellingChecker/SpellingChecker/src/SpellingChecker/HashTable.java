@@ -3,16 +3,18 @@ package SpellingChecker;
 import CollisionResolution.*;
 import HashFunctions.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  * Created by Oliver Poole(12022846) on 15/10/15.
+ *
+ * Implementation of a HashTable
  */
 public class HashTable {
 
-    private int tableSize = 0;
+    public static int tableSize = 0;
     private TableNode[] table;
     private HashFunction hashFunction;
     private CollisionResolutionMethod collisionResolutionMethod;
@@ -25,8 +27,7 @@ public class HashTable {
 
     public enum CollisionResolutionMethod {
         LinearProbing,
-        ChainingLinkedList,
-        ChainingHashTable
+        Chaining
     }
 
     /**
@@ -36,21 +37,33 @@ public class HashTable {
      * @param tableSize - The size of the table to use
      * @param hashFunction - The hash function to use
      */
-    public HashTable(String filePath, int tableSize, HashFunction hashFunction, CollisionResolutionMethod collisionResolutionMethod) throws IOException {
+    public HashTable(String filePath, int tableSize, HashFunction hashFunction, CollisionResolutionMethod collisionResolutionMethod) {
 
-        this.tableSize = tableSize;
+        HashTable.tableSize = tableSize;
         this.hashFunction = hashFunction;
         this.collisionResolutionMethod = collisionResolutionMethod;
 
         // Create new table
         this.createEmptyHashTable();
 
-        // Load from .txt file
-        for (String line : Files.readAllLines(Paths.get(filePath))) {
+        Scanner lineScanner = null;
+        try {
+            lineScanner = new Scanner(new File(filePath));
 
-            // Add contents of file to hash table
+        } catch (FileNotFoundException e) {
+            System.out.println("Dictionary File not found");
+            e.printStackTrace();
+        }
+
+        while (lineScanner.hasNextLine()) {
+            String line = lineScanner.nextLine();
+
             addElementToHashTable(line);
         }
+
+        // No we've finished adding item, reset the Observer
+        HashTableObserver.elementNotFound = 0;
+        HashTableObserver.elementFound = 0;
     }
 
 
@@ -58,7 +71,7 @@ public class HashTable {
      * Hashes an element so it can be added to the table
      *
      * @param element - The element to hash
-     * @return The hashvalue of that element
+     * @return The hash value of that element
      */
     protected int hashElement(String element) {
 
@@ -84,7 +97,7 @@ public class HashTable {
 
 
     /**
-     * Creates a blank hashtable ready for use
+     * Creates a blank hash table ready for use
      */
     private void createEmptyHashTable() {
         table = new TableNode[tableSize];
@@ -102,22 +115,32 @@ public class HashTable {
 
             int hashValue = hashElement(element);
 
-            // Find the current node at that hash index
-            TableNode currentNode = table[hashValue];
-
-            CollisionResolutionInterface collisionResolution = null;
+            CollisionResolutionInterface collisionResolution;
 
             switch (collisionResolutionMethod) {
-                case LinearProbing: collisionResolution = new LinearProbing(); break;
-                case ChainingHashTable: collisionResolution = new Chaining(); break;
-                case ChainingLinkedList: collisionResolution = new Chaining(); break;
+                case LinearProbing: {
+                    collisionResolution = new LinearProbing();
+
+                    hashValue = (int)collisionResolution.resolveConflictWithElement(element, table, hashValue, collisionResolutionMethod);
+
+                    TableNode newNode = new TableNode();
+                    newNode.data = element;
+
+                    table[hashValue] = newNode;
+                    break;
+                }
+
+                case Chaining: {
+                    collisionResolution = new Chaining();
+
+                    // Resolve the conflict and update the node in the table
+                    TableNode currentNode = (TableNode)collisionResolution.resolveConflictWithElement(element, table, hashValue, collisionResolutionMethod);
+
+                    table[hashValue] = currentNode;
+
+                    break;
+                }
             }
-
-            // Resolve the conflict and update the node in the table
-            currentNode = collisionResolution.resolveConflictWithElement(element, table, currentNode, collisionResolutionMethod);
-
-            table[hashValue] = currentNode;
-
         }
     }
 
@@ -135,18 +158,29 @@ public class HashTable {
         TableNode currentNode = table[hashValue];
 
         // Is there anything at the hash value location?
-        if (currentNode == null) return false;
+        if (currentNode == null) {
+            HashTableObserver.elementNotFound++;
+            return false;
+        }
 
         // Using the same collision resolution strategies, search for the element
         CollisionResolutionInterface collisionResolution = null;
 
         switch (collisionResolutionMethod) {
             case LinearProbing: collisionResolution = new LinearProbing(); break;
-            case ChainingHashTable: collisionResolution = new Chaining(); break;
-            case ChainingLinkedList: collisionResolution = new Chaining(); break;
+            case Chaining: collisionResolution = new Chaining(); break;
         }
 
         // Resolve the conflict and assign the updated table
-        return collisionResolution.elementExistsInTable(element, table, hashValue, collisionResolutionMethod);
+        Boolean elementFound = collisionResolution.elementExistsInTable(element, table, hashValue, collisionResolutionMethod);
+
+        if (elementFound) {
+            HashTableObserver.elementFound++;
+        }
+        else {
+            HashTableObserver.elementNotFound++;
+        }
+
+        return elementFound;
     }
 }

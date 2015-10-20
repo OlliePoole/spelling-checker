@@ -8,18 +8,11 @@ import SpellingChecker.HashTable;
 
 public class Chaining implements CollisionResolutionInterface {
 
-     public TableNode resolveConflictWithElement(String element, TableNode[] table, TableNode currentNode, HashTable.CollisionResolutionMethod method) {
+    public Object resolveConflictWithElement(String element, TableNode[] table, int hashValue, HashTable.CollisionResolutionMethod method) {
 
-        switch (method) {
-            case ChainingLinkedList: {
-                currentNode = Chaining.resolveCollisionWithLinkedList(element, currentNode);
-                break;
-            }
-            case ChainingHashTable: {
-                currentNode = Chaining.resolveCollisionWithHashTable(element, table);
-                break;
-            }
-        }
+        TableNode currentNode = table[hashValue];
+
+        currentNode = Chaining.resolveCollisionWithLinkedList(element, currentNode);
 
         return currentNode;
     }
@@ -27,15 +20,7 @@ public class Chaining implements CollisionResolutionInterface {
 
     public Boolean elementExistsInTable(String element, TableNode[] table, int hashValue, HashTable.CollisionResolutionMethod method) {
 
-        switch (method) {
-            case ChainingLinkedList: {
-                return Chaining.elementExistsInTableUsingLinkedListWithElement(element, table[hashValue]);
-            }
-            case ChainingHashTable: {
-                return Chaining.elementExistsInTableUsingHashTableWithElement(element, hashValue, table);
-            }
-            default: return false;
-        }
+        return Chaining.elementExistsInTableUsingLinkedListWithElement(element, table[hashValue]);
     }
 
 
@@ -58,18 +43,6 @@ public class Chaining implements CollisionResolutionInterface {
         return newNode;
     }
 
-    /**
-     * Resolves a conflict by embedding a further hash table inside each element of the existing hash table
-     *
-     * @param element - the element to add
-     * @param table - The table to edit
-     *
-     * @return The updated table
-     */
-    private static TableNode resolveCollisionWithHashTable(String element, TableNode table[]) {
-        //TODO: Implement this!
-        return new TableNode();
-    }
 
     /**
      * Searches the table based on the premise that the collision resolution strategy
@@ -82,7 +55,9 @@ public class Chaining implements CollisionResolutionInterface {
      */
     private static Boolean elementExistsInTableUsingLinkedListWithElement(String element, TableNode currentNode) {
 
-        if (currentNode == null) return false;
+        if (currentNode == null) {
+            return false;
+        }
 
         if (currentNode.data.equals(element)) {
             return true;
@@ -90,10 +65,5 @@ public class Chaining implements CollisionResolutionInterface {
         else {
             return elementExistsInTableUsingLinkedListWithElement(element, currentNode.next);
         }
-    }
-
-    private static Boolean elementExistsInTableUsingHashTableWithElement(String element, int hashValue, TableNode[] table) {
-        // TODO: Implement this!
-        return false;
     }
 }

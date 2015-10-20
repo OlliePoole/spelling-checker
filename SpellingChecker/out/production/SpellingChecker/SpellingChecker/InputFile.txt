@@ -1,0 +1,60 @@
+U08282  Algorithms and Advanced Data Structures
+Coursework
+The complete coursework is worth 50% of the module assessment, and constitutes 2 parts.  Each part is worth 25% of the module, totaling 50%. The first part constitutes Q1, which must be completed and demonstrated during week 5. The second part constitutes questions Q2 or Q3, and you only need to answer either Q2 or Q3, and either one is worth 25% of the module. The second part must be completed and demonstrated by week 11.
+You are recommended to program in C++, but you may use a language of your choice, by agreement, provided that you are able to demonstrate operation to your tutors in the practical or sessions. It is also important that you describe the design, implementation, and testing and conclusions details for each program in your submission.
+For each element, the 25 marks will be awarded as: Design 8 marks, Implementation 12 marks, and Testing and Conclusions 5 marks.
+
+
+Demonstration
+
+Students will demonstrate the design, implementation and testing of each program individually to tutors during the practical sessions.
+
+Submission
+
+A development report is required for each part, therefore each part can be submitted separately. The CO1 front cover should be used on each submission and this will be used to provide feedback. We will aim to provide feedback and marks on assignments within 2 weeks of submission.  Students will be required to submit to the U08282 coursework box in Turing reception. Additionally students should upload to the Turnitin link on Moodle U08282.  The submission should present an account of the design, implementation, and testing and conclusions to include test results and what you can conclude from your experiment. In particular, each submission should include a full listing of source code and relevant data files, screen shots, etc. Students are expected to explore algorithms and datastructures to solve the problems, and a discussion and rationale behind the selection of the algorithms and datastructures, compared to other related algorithms and datastructures, is expected as a part of the design, which should reflect in the implementation and conclusions. Late submission will be penalized as per the university regulations.
+
+We hope you enjoy the algorithms, data structures, and programming.
+
+Part 1: Answer Q1.
+Q1 Hashing
+
+Design, implement and test a spelling checker.
+
+You can perform a spelling check on any of your own written work as follows.
+1. Convert a document of your own that is to be checked into plaintext (.txt) format.
+2. The attached file dictionary.txt contains a list of English words taken from a dictionary.
+3. Write a hashing program to input the words from dictionary.txt into a hash table using a hashing algorithm and collision resolution strategy of your choice.  For information dictionary.txt contains 80368 words, 1 per line.
+4. When the dictionary has been loaded to the hash table you can then check your own document by simply checking for the presence of each word in turn.  If the word is found then do nothing, if the word is not present then you can output that the word is unrecognized or incorrectly spelled to the user.
+4. Include some analysis for your hash table to measure the load factor and the average number of hops required, separately for successful and unsuccessful searches.
+5. Aim to obtain an optimum performance by making changes to the hashing algorithm to minimize the average number of hops per search.
+6. You should record the results for your various trials and give an account of your development strategy.
+[25 marks]
+
+
+Part 2: Answer either Q2 or Q3.
+
+Q2 Divide and Conquer: Adaptive Quadrature
+
+Develop an Adaptive Quadrature program that can integrate continuous well behaved functions numerically, robustly and to a specified level of accuracy.
+You should aim for a flexible implementation that can deal with a range of function behaviours and levels of accuracy.
+The design needs to operate with 32 bit floating point or 64 bit double precision data types.
+The implementation needs to be verified and evaluated both for accuracy and stability of solution values.
+The implementation also needs to be tested to compare its performance against more standard fixed strip numerical integration methods.
+
+Some example functions to integrate
+
+
+
+
+
+
+Graph drawing tool:
+http://rechneronline.de/function-graphs/
+[25 marks]
+
+
+
+Q3 Coding and Compression: Arithmetic Coding
+
+Design, implement and test a program to calculate the arithmetic coding for a given text string.  The coding can be verified by implementing the decoding to verify that the original string can be regenerated.  A double precision floating point data type can be used to store the coded value but be aware that under the IEEE 745 standard the 52 bit mantissa will provide only up to 16 digits of accuracy.  Therefore the length of string to be encoded should be suitably restricted.
+[25 marks]
