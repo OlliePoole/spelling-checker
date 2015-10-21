@@ -1,4 +1,5 @@
 package CollisionResolution;
+import SpellingChecker.HashTableObserver;
 import SpellingChecker.TableNode;
 import SpellingChecker.HashTable;
 
@@ -7,6 +8,8 @@ import SpellingChecker.HashTable;
  */
 
 public class Chaining implements CollisionResolutionInterface {
+
+    private static int numberOfSearches;
 
     public Object resolveConflictWithElement(String element, TableNode[] table, int hashValue, HashTable.CollisionResolutionMethod method) {
 
@@ -19,6 +22,9 @@ public class Chaining implements CollisionResolutionInterface {
 
 
     public Boolean elementExistsInTable(String element, TableNode[] table, int hashValue, HashTable.CollisionResolutionMethod method) {
+
+        // reset the search count
+        numberOfSearches = 1;
 
         return Chaining.elementExistsInTableUsingLinkedListWithElement(element, table[hashValue]);
     }
@@ -55,15 +61,27 @@ public class Chaining implements CollisionResolutionInterface {
      */
     private static Boolean elementExistsInTableUsingLinkedListWithElement(String element, TableNode currentNode) {
 
-        if (currentNode == null) {
-            return false;
+        while (currentNode != null) {
+            if (currentNode.data.equals(element)) {
+                HashTableObserver.averageSuccessfulLookup.add(numberOfSearches);
+                HashTableObserver.elementFound++;
+                return true;
+            }
+            else {
+
+                if (currentNode.next == null) {
+                    HashTableObserver.averageFailedLookup.add(numberOfSearches);
+                    HashTableObserver.elementNotFound++;
+                    return false;
+                }
+
+                numberOfSearches++;
+                currentNode = currentNode.next;
+            }
         }
 
-        if (currentNode.data.equals(element)) {
-            return true;
-        }
-        else {
-            return elementExistsInTableUsingLinkedListWithElement(element, currentNode.next);
-        }
+        HashTableObserver.averageFailedLookup.add(numberOfSearches);
+        HashTableObserver.elementNotFound++;
+        return false;
     }
 }

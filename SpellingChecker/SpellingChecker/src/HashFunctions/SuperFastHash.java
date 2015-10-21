@@ -13,7 +13,6 @@ public class SuperFastHash implements HashFunctionInterface {
     }
 
     private static final long k16_BIT_MASK = 0xFFFFL;
-    private static final int k1_BIT_MASK = 0x1;
 
     /**
      * Super Fast Hash, Paul Hsieh

@@ -5,6 +5,7 @@ import HashFunctions.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -15,14 +16,15 @@ import java.util.Scanner;
 public class HashTable {
 
     public static int tableSize = 0;
-    private TableNode[] table;
-    private HashFunction hashFunction;
-    private CollisionResolutionMethod collisionResolutionMethod;
+    public TableNode[] table;
+    public HashFunction hashFunction;
+    public CollisionResolutionMethod collisionResolutionMethod;
 
     public enum HashFunction {
         SuperFastHash,
         BobJenkinsHash,
-        OneAtATimeHash
+        OneAtATimeHash,
+        OliverPooleHash
     }
 
     public enum CollisionResolutionMethod {
@@ -57,13 +59,16 @@ public class HashTable {
 
         while (lineScanner.hasNextLine()) {
             String line = lineScanner.nextLine();
-
             addElementToHashTable(line);
         }
+
+        lineScanner.close();
 
         // No we've finished adding item, reset the Observer
         HashTableObserver.elementNotFound = 0;
         HashTableObserver.elementFound = 0;
+        HashTableObserver.averageSuccessfulLookup = new ArrayList<>();
+        HashTableObserver.averageFailedLookup = new ArrayList<>();
     }
 
 
@@ -88,6 +93,10 @@ public class HashTable {
             }
             case OneAtATimeHash: {
                 hashingFunction = new OneAtATimeHash();
+                break;
+            }
+            case OliverPooleHash: {
+                hashingFunction = new OliverPooleHash();
                 break;
             }
         }
@@ -173,13 +182,6 @@ public class HashTable {
 
         // Resolve the conflict and assign the updated table
         Boolean elementFound = collisionResolution.elementExistsInTable(element, table, hashValue, collisionResolutionMethod);
-
-        if (elementFound) {
-            HashTableObserver.elementFound++;
-        }
-        else {
-            HashTableObserver.elementNotFound++;
-        }
 
         return elementFound;
     }
