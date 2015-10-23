@@ -9,7 +9,6 @@ import java.util.Scanner;
 public class SpellingChecker {
 
     public static void main(String[] args) {
-        // Lets do something useful here
 
         // Build the hash table
         HashTable table = new HashTable("SpellingChecker/src/SpellingChecker/dictionary.txt", 150001,
@@ -32,8 +31,10 @@ public class SpellingChecker {
             Scanner wordScanner = new Scanner(lineScanner.nextLine());
 
             while (wordScanner.hasNext()) {
+                // Remove any punctuation and make the letters lower case
                 String word = wordScanner.next().replaceAll("[^a-zA-Z ]", "").toLowerCase();
 
+                // If the word isn't empty or whitespace
                 if (!(word.equals("") || word.equals(" "))) {
                     Boolean wordExists = table.elementExistsInHashTable(word);
 
@@ -42,10 +43,12 @@ public class SpellingChecker {
                     }
                 }
             }
+            wordScanner.close();
         }
+        lineScanner.close();
 
 
-        /*********     Analytics     *********/
+        /*********     Analytics     ********/
 
         // Find the average number of failed searches
         int total = 0;
@@ -122,5 +125,8 @@ public class SpellingChecker {
 
             }
         }
+         //*/
+
+
     }
 }
